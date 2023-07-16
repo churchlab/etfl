@@ -60,7 +60,7 @@ def parse_gpr(gpr):
 
 def multiple_replace(text, adict, ignore_case = False):
     """ From https://www.oreilly.com/library/view/python-cookbook/0596001673/ch03s15.html
-    """
+    Paul Kramer: DOES NOT WORK WELL FOR ISOZYMES!!!!!!!!!
     # the simplest, lambda-based implementation
     # Create a regular expression from all of the dictionary keys
     if ignore_case:
@@ -68,8 +68,20 @@ def multiple_replace(text, adict, ignore_case = False):
     else:
         regex = re.compile(r'\b' + r'\b|\b'.join(map(re.escape, adict.keys(  ))) + r'\b')
 
-# For each match, look up the corresponding value in the dictionary
+    # For each match, look up the corresponding value in the dictionary
     return regex.sub(lambda match: adict[match.group(0)], text)
+    """
+
+    #Paul Kramer 2022.08.28
+    if ignore_case:
+        for k, v in adict.items():
+            text = text.replace(k, v)
+            text = text.replace(k.upper(), v)
+    else:
+        for k, v in adict.items():
+            text = text.replace(k, v)
+
+    return text
 
 
 def simplify_gpr(gpr):
