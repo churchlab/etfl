@@ -572,6 +572,10 @@ def init_me_model_from_dict(new, obj):
     # new.coupling_dict = rebuild_coupling_dict(, obj['coupling_dict'])
     new.add_enzymes([enzyme_from_dict(x) for x in obj['enzymes']], prep=False)
 
+    # Paul Kramer added
+    eids = [e["id"] for e in obj['enzymes']]
+    eid2ublb = {v["id"]: (v["lb"], v["ub"]) for v in obj["variables"] if v["id"] in eids}
+
     # Make RNAP
     new_rnap = rnap_from_dict(obj['rnap'])
     for this_rnap in new_rnap.values():
@@ -621,7 +625,7 @@ def init_me_model_from_dict(new, obj):
     # new.rnap.init_variable()
     # new.ribosome.init_variable()
     for enz in new.enzymes:
-        enz.init_variable()
+        enz.init_variable(lb=eid2ublb[enz.id][0], ub=eid2ublb[enz.id][1])
     for mrna in new.mrnas:
         mrna.init_variable()
     # This is already done by model.add_trna

@@ -42,7 +42,7 @@ class Enzyme(Macromolecule):
 
         self.complexation = None
 
-    def init_variable(self, queue=False):
+    def init_variable(self, lb=0, ub=1, queue=False):
         """
         Attach an EnzymeVariable object to the Species. Needs to have the object
         attached to a model
@@ -53,8 +53,8 @@ class Enzyme(Macromolecule):
             self.model.add_variable(EnzymeVariable,
                                     self,
                                     scaling_factor=self.scaling_factor,
-                                    lb = 0,
-                                    ub = 1,
+                                    lb=lb,
+                                    ub=ub,
                                     queue=queue)
 
     @property
