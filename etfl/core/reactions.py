@@ -105,8 +105,8 @@ class EnzymaticReaction(ExpressionReaction):
 
     @property
     def scaling_factor(self):
-        return self.enzyme.kcat_max * self.enzyme.scaling_factor
-        # return 1
+        # return max([max([enzyme.kcat_fwd, enzyme.kcat_bwd]) * enzyme.scaling_factor for enzyme in self.enzymes]) #Paul Kramer 2022.11.10
+        return 1
 
 
 class TranscriptionReaction(EnzymaticReaction):
