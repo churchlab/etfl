@@ -751,8 +751,17 @@ class MEModel(LCSBModel, Model):
         # for all i, E_i <= E_max (= 1g/gDW)
         # v_fwd / sum(kcat_i*E_i^max) <= sum(kcat_i*E_i) / sum(kcat_i*E_i^max) (<= 1)
 
-        enz_constraint_expr_fwd = (fwd_variable - sum(v_max_fwd.values()))/(k_f*E_m)
-        enz_constraint_expr_bwd = (bwd_variable - sum(v_max_bwd.values()))/(k_b*E_m)
+        if k_f > 0:  # some kcat_fwd > 0
+            enz_constraint_expr_fwd = (fwd_variable - sum(v_max_fwd.values())) / (k_f * E_m)
+        else:  # all kcat_fwd are 0 --> k_f == 0
+            assert sum(v_max_fwd.values()) == 0
+            enz_constraint_expr_fwd = fwd_variable
+
+        if k_b > 0:  # some kcat_bwd > 0
+            enz_constraint_expr_bwd = (bwd_variable - sum(v_max_bwd.values())) / (k_b * E_m)
+        else:  # all kcat_bwd are 0 --> k_f == 0
+            assert sum(v_max_bwd.values()) == 0
+            enz_constraint_expr_bwd = bwd_variable
 
 
         self.add_constraint(kind=ForwardCatalyticConstraint, hook=reaction,
